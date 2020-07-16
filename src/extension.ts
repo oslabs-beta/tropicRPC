@@ -2,6 +2,14 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 
+// only for creating config file
+const fs = require("fs");
+const path = require("path");
+
+// // only for creating config file when file does not already exist
+// // requiring in template contained in configTemplate.txt
+// const configTemplate = require("./configTemplate.txt");
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -16,49 +24,51 @@ export function activate(context: vscode.ExtensionContext) {
   // User inputs port or external URL that server is running on
   // In general, this config file will give the Tropic extension access to service methods/functions
 
-  // VS Code command: Activate
-  // Stretch: Tropic starts server for user
-  // show output channel (make sure it's cleared)
-  // parse through config file to grab user-provided data
-  // if information is missing or not in the right format,
-  //return error and instruct user to enter appropriate information
+  // vscode.commands.registerCommand: binds a command id to a handler function
+  const createConfigFile = vscode.commands.registerCommand(
+    "tropic.createConfigFile",
+    () => {
+      // check if root directory already has a tropic.config.js file
+      const tropicConfigPath = `Users/koonchow/Codesmith/Projects/Tropic/src/tropic.config.js`; // `${rootPath}/tropic.createConfigFile.js`;
+      // if the tropic.config.js file already exists, display message indicating the file already exists
+      if (fs.existsSync(tropicConfigPath)) {
+        vscode.window.showInformationMessage(
+          `A Tropic configuration file already exists at ${tropicConfigPath}`
+        );
+        // exit out
+        return null;
+      }
 
-  // provide user with a 'tropic' function that they can use to call a function on their grpc server
-  // include guidance on what user should input in request function
-  // need to pass in an object that details the service, method, and a body
+      // const templateFile = fs.readFileSync(
+      //   path.resolve(__dirname, "./configTemplate.txt"),
+      //   "utf8"
+      // );
+      // console.log("templateFile", templateFile);
+      // if tropic.config.js file does not already exist, write to a new file
+      fs.writeFileSync(
+        tropicConfigPath,
+        // string from configTemplate.txt that will be used to populate the new file
+        // templateFile,
+        'module.exports = {\n  // change "./server/index.js" to the relative path from the root directory to\n  // the file that starts your server.\n  // if you\'re connecting to an external server,\n  // change "./server/index.js" to its URL in the following format:\n  // "https://yourserverurl.com"\n  entry: \'./server/index.js\',\n\n  // change 3000 to the port number that your server runs on\n  portNumber: 3000,\n\n  // to increase the amount of time allowed for the server to startup, add a time\n  // in milliseconds (integer) to the "serverStartupTimeAllowed"\n  // serverStartupTimeAllowed: 5000,\n};\n',
+        "utf8"
+      );
 
-  // create on save listener
-  // on save: clear output channel (in case user had any previously completed requests)
-  // parse through the file looking for our function invocation
-  // JSON.parse the string between () invocation call
-  // if inaccurate/incomplete information provided in request, throw error message and instructions on resubmitting request
-  // (maybe user didn't turn on server?  can instruct user to check that server is actually on)
-  // invoke a grpc request with that info
-  // parse through response
-  // display result in output channel
+      // open the new file in VS Code
+      vscode.workspace.openTextDocument(tropicConfigPath).then((doc) => {
+        // apparently openTextDocument doesn't mean it's visible...
+        vscode.window.showTextDocument(doc);
+      });
+    }
+  );
 
-  // VS Code command: De-activate
-  // Turn off on save listener, so when user saves file, nothing happens
-  // Stretch: End server, if we had opened it
+  // push it to the subscriptions
+  context.subscriptions.push(createConfigFile);
 
-  // ***** TEAM7 NOTES END HERE *****
-
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "tropic" is now active!');
-
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
   let disposable = vscode.commands.registerCommand("tropic.helloWorld", () => {
     // The code you place here will be executed every time your command is executed
 
     // Display a message box to the user
     vscode.window.showInformationMessage("Hello World from Tropic!");
   });
-
   context.subscriptions.push(disposable);
 }
-
-// this method is called when your extension is deactivated
-export function deactivate() {}

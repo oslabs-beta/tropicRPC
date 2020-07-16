@@ -10,7 +10,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:tropic.helloWorld"
+    "onCommand:tropic.helloWorld",
+    "onCommand:tropic.createConfigFile"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -18,6 +19,10 @@
       {
         "command": "tropic.helloWorld",
         "title": "Tropic"
+      },
+      {
+        "command": "tropic.createConfigFile",
+        "title": "Tropic: Create Tropic Config File"
       }
     ]
   },
@@ -41,5 +46,8 @@
     "mocha": "^7.1.2",
     "typescript": "^3.8.3",
     "vscode-test": "^1.3.0"
+  },
+  "dependencies": {
+    "vscode": "^1.1.37"
   }
 }
