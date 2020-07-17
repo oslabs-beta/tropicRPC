@@ -15,11 +15,13 @@ const getRootProjectDir = () => {
   const currOpenFile = vscode.window.activeTextEditor;
   // Confirm that a project is open
   if (workspaceFolders === undefined) {
-    return vscode.window.showInformationMessage('Please open a project.');
+    vscode.window.showInformationMessage('Please open a project.');
+    return null;
   }
   // Confirm that a file is open
   if (currOpenFile === undefined) {
-    return vscode.window.showInformationMessage('Please open a file.');
+    vscode.window.showInformationMessage('Please open a file.');
+    return null;
   }
   // Get the paths for the main folder and open file
   const currWorkspacePath = workspaceFolders[0].uri.fsPath;
