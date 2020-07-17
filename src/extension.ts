@@ -8,30 +8,17 @@ const path = require('path');
 
 const createConfigFileCb = require('./modules/createConfigFileCommand');
 
-// // only for creating config file when file does not already exist
-// // requiring in template contained in configTemplate.txt
-// const configTemplate = require("./configTemplate.txt");
-
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-  // ***** TEAM7 NOTES *****:
-
-  // tropic needs the path to the project root folder to add the config file
-  // also to find path of server?
-
-  // VS Code command: Create Config File
-  // User inputs path to server file as entry point
-  // User inputs path to proto file
-  // User inputs port or external URL that server is running on
-  // In general, this config file will give the Tropic extension access to service methods/functions
-
+  /**************************************************************
+   * Command: Create configuration file in the user's project
+   **************************************************************/
   // vscode.commands.registerCommand: binds a command id to a handler function
   const createConfigFile = vscode.commands.registerCommand(
     'tropic.createConfigFile',
     createConfigFileCb
   );
-
   // push it to the subscriptions
   context.subscriptions.push(createConfigFile);
 
