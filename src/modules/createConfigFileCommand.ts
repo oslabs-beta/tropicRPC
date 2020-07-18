@@ -1,3 +1,11 @@
+/**
+ * @author : Ed Chow, Joyce Lo, Shah Khan, Steve Canavan July 16, 2020
+ * @function : creates config file
+ * @param : none
+ * @returns : null
+ * @changelog : ##WHOEVER CHANGES THE FILE, date, details
+ */
+
 import * as vscode from 'vscode';
 
 const fs = require('fs');
