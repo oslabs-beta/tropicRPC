@@ -1,12 +1,10 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-// only for creating config file
-const fs = require('fs');
-const path = require('path');
-
 const createConfigFileCb = require('./modules/createConfigFileCommand');
+const {
+  activateTropicCb,
+  deactivateTropicCb,
+} = require('./modules/activateAndDeactivateCommand');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -19,12 +17,29 @@ export function activate(context: vscode.ExtensionContext) {
     'tropic.createConfigFile',
     createConfigFileCb
   );
-  // push it to the subscriptions
-  context.subscriptions.push(createConfigFile);
+
+  /**************************************************************
+   * Command: Activate Tropic functionality
+   **************************************************************/
+  const activateTropic = vscode.commands.registerCommand(
+    'tropic.activateTropic',
+    activateTropicCb
+  );
+
+  /**************************************************************
+   * Command: Deactivate save listener
+   **************************************************************/
+  const deactivateTropic = vscode.commands.registerCommand(
+    'tropic.deactivateTropic',
+    deactivateTropicCb
+  );
+  context.subscriptions.push(
+    createConfigFile,
+    activateTropicCb,
+    deactivateTropicCb
+  );
 
   let disposable = vscode.commands.registerCommand('tropic.helloWorld', () => {
-    // The code you place here will be executed every time your command is executed
-
     // Display a message box to the user
     vscode.window.showInformationMessage('Hello World from Tropic!');
   });
