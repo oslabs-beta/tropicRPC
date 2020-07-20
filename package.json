@@ -11,18 +11,28 @@
   ],
   "activationEvents": [
     "onCommand:tropic.helloWorld",
-    "onCommand:tropic.createConfigFile"
+    "onCommand:tropic.createConfigFile",
+    "onCommand:tropic.activateTropic",
+    "onCommand:tropic.deactivateTropic"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "tropic.helloWorld",
-        "title": "Tropic"
+        "title": "Tropic: Hello World"
       },
       {
         "command": "tropic.createConfigFile",
-        "title": "Tropic: Create Tropic Config File"
+        "title": "Tropic: Create Config File"
+      },
+      {
+        "command": "tropic.activateTropic",
+        "title": "Tropic: Activate"
+      },
+      {
+        "command": "tropic.deactivateTropic",
+        "title": "Tropic: Deactivate"
       }
     ]
   },
