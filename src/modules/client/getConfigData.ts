@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 const getRootProjectDir = require('./getRootProjectDir');
 
-function parseConfigFile() {
+function getConfigData() {
   //create variable to reference root path of user's project
   const rootDir = getRootProjectDir();
   // create variable to reference config file path
@@ -27,14 +27,15 @@ function parseConfigFile() {
 
   // check if config file exists in file system
   if (fs.existsSync(tropicConfigPath)) {
-    // if config file exists, require it in as an object
-    const configObj = require(`${tropicConfigPath}`);
+    // if config file exists, require config details in as an object
+    const { config } = require(`${tropicConfigPath}`);
     // assign variables to value of user inputs in config file
-    entryPoint = path.resolve(rootDir, configObj.entry);
-    portNumber = configObj.portNumber;
-    protoFile = path.resolve(rootDir, configObj.protoFile);
+    entryPoint = path.resolve(rootDir, config.entry);
+    portNumber = config.portNumber;
+    protoFile = path.resolve(rootDir, config.protoFile);
     // return object with three key-value pairs
     // in each pair, key and value are the same, so they are shown as one word
+    console.log('RESULTING OBJECT*****', { entryPoint, portNumber, protoFile });
     return { entryPoint, portNumber, protoFile };
   }
   // if config file does not exist in file system, display message instructing user to create config file
@@ -43,4 +44,4 @@ function parseConfigFile() {
 }
 
 // export module
-module.exports = parseConfigFile;
+module.exports = getConfigData;
