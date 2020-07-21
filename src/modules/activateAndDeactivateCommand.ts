@@ -1,49 +1,59 @@
 import * as vscode from 'vscode';
 
-// save listener is declared globally within this file to be accessible by activate and deactivate functions
+// save listener and output channel are declared globally within this file,
+// to be accessible by activate and deactivate functions
 let saveListener: vscode.Disposable;
-// same with this output channel
 const tropicChannel = vscode.window.createOutputChannel('Tropic');
 
+// require in necessary files/modules
+const fs = require('fs');
+const getRootProjectDir = require('./client/getRootProjectDir');
+const onSaveCb = require('./client/onSaveCb');
+
 const activateTropicCb = () => {
-  // VS Code command: Activate
-  // Stretch: Tropic starts server for user
-  // show output channel (make sure it's cleared)
-  // parse through config file to grab user-provided data
-  // if information is missing or not in the right format,
-  //return error and instruct user to enter appropriate information
+  // create variable to reference root path of user's project
+  const rootDir = getRootProjectDir();
+  // create variable to reference config file path
+  const tropicConfigPath = `${rootDir}/.tropic.config.js`;
 
-  // provide user with a 'tropic' function that they can use to call a function on their grpc server
-  // include guidance on what user should input in request function
-  // need to pass in an object that details the service, method, and a body
+  // if config file does not exist in file system, display message instructing user to create config file
+  if (!fs.existsSync(tropicConfigPath)) {
+    vscode.window.showInformationMessage('Please create a config file.');
+    // exit function
+    return null;
+  }
 
-  // create on save listener
-  // on save: clear output channel (in case user had any previously completed requests)
-  // parse through the file looking for our function invocation
-  // JSON.parse the string between () invocation call
-  // if inaccurate/incomplete information provided in request, throw error message and instructions on resubmitting request
-  // (maybe user didn't turn on server?  can instruct user to check that server is actually on)
-  // invoke a grpc request with that info
-  // parse through response
-  // display result in output channel
-
-  // we are declaring a vs code listener to run functionality on save
-  saveListener = vscode.workspace.onDidSaveTextDocument(() => {
-    // logic for sending grpc request goes here
-  });
-  // focuses on output channel and clears off any previous responses
+  // open the output channel
+  // focus on output channel and clear off any previous responses
   tropicChannel.show(true);
   tropicChannel.clear();
+  tropicChannel.append(
+    'Tropic is active. \nAdd requests to config file and save to view responses.'
+  );
+
+  // start listening for saves
+  // saveListener invokes onSaveCb
+  // logic for sending gRPC request goes inside onSaveCb
+  saveListener = vscode.workspace.onDidSaveTextDocument((document) => {
+    onSaveCb(document, tropicChannel, tropicConfigPath, rootDir);
+  });
+  // exit function
+  return null;
 };
 
 const deactivateTropicCb = () => {
-  // disposes saveListener
-  if (saveListener) saveListener.dispose();
+  // dispose of saveListener
+  if (saveListener) {
+    saveListener.dispose();
+  }
   vscode.window.showInformationMessage(`Tropic is deactivated`);
-  // hides and clears Tropic output channel
+
+  // hide and clear Tropic output channel
   tropicChannel.hide();
   tropicChannel.clear();
+  // exit function
+  return null;
 };
 
-// exports these functions out to extension.ts
+// export functions to extension.ts
 module.exports = { activateTropicCb, deactivateTropicCb };
