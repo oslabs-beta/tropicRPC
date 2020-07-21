@@ -4,13 +4,13 @@ const config = {
   entry: './server/index.js',
 
   // change 3000 to the port number on which your server runs
-  portNumber: '3000',
+  portNumber: 3000,
 
   // change "./demo.proto" to the relative path from the root directory to your proto file
   protoFile: 'src/proto/demo.proto',
 };
 
-// add request(s) here
+// after activating Tropic extension, add request(s) here and save this file to execute
 const requests = {
   // customize your request values below
   request1: {
