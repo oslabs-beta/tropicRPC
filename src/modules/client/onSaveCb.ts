@@ -2,26 +2,33 @@
  * @author : Joyce Lo, Shahrukh Khan; July 18, 2020
  * @author : Joyce Lo, Roseanne Damasco, Steve Canavan; July 20, 2020
  * @function : executes the config file, which exports grpc server and proto file data, to be processed
- * @param : none
- * @returns : none
+ * @param : {TextDocument} document - file that was saved
+ * @param : {OutputChannel} tropicChannel - output channel for VS Code extension
+ * @param : {string} tropicConfigPath - path to Tropic config file
+ * @param : {string} rootDir - path to user's project root directory
+ * @returns : null
  * @changelog : ##WHOEVER CHANGES THE FILE, date, details
  * * */
 
 // access the VS Code API
 import * as vscode from 'vscode';
 
-// require in fs, path modules, and getRootProjectDir function
+// require in fs, path, and getRootProjectDir function/module
 const fs = require('fs');
 const path = require('path');
 const getRootProjectDir = require('./getRootProjectDir');
 
-const onSave = (document: TextDocument) => {
-  // create variable to reference root path of user's project
-  const rootDir = getRootProjectDir();
-  // create variable to reference config file path
-  const tropicConfigPath = `${rootDir}/.tropic.config.js`;
+const onSave = (
+  document: TextDocument,
+  tropicChannel: OutputChannel,
+  tropicConfigPath: string,
+  rootDir: string
+) => {
+  // show and clear Tropic output channel
+  tropicChannel.show(true);
+  tropicChannel.clear();
 
-  //check if TextDocument is the config file
+  //check if TextDocument is not the config file
   if (document.uri.fsPath !== tropicConfigPath) {
     // if config file does not exist in file system, display message instructing user to create config file
     if (!fs.existsSync(tropicConfigPath)) {
@@ -43,19 +50,15 @@ const onSave = (document: TextDocument) => {
   // to account for any subsequent updates to config file, need to invalidate the cache by deleting it
   // if cache is not invalidated, every call to require would result in the same initial output
   delete require.cache[tropicConfigPath];
-  // if config file exists, get config and request objects from config file
+  // get config and request objects from config file
   const { config, requests } = require(`${tropicConfigPath}`);
+
   // assign variables to value of user inputs in config file
   entryPoint = path.resolve(rootDir, config.entry);
   portNumber = config.portNumber;
   protoFile = path.resolve(rootDir, config.protoFile);
   requestsArr = Object.values(requests);
-  console.log('RESULTING OBJECT*****', {
-    entryPoint,
-    portNumber,
-    protoFile,
-    requestsArr,
-  });
+
   // send necessary data to request functionality
 };
 
