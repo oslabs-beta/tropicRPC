@@ -10,13 +10,13 @@
 // access the VS Code API
 import * as vscode from 'vscode';
 
-// require in fs and path modules
+// require in fs, path modules, and getRootProjectDir function
 const fs = require('fs');
 const path = require('path');
 const getRootProjectDir = require('./getRootProjectDir');
 
 const onSave = (document: TextDocument) => {
-  //create variable to reference root path of user's project
+  // create variable to reference root path of user's project
   const rootDir = getRootProjectDir();
   // create variable to reference config file path
   const tropicConfigPath = `${rootDir}/.tropic.config.js`;
@@ -26,7 +26,7 @@ const onSave = (document: TextDocument) => {
     // if config file does not exist in file system, display message instructing user to create config file
     if (!fs.existsSync(tropicConfigPath)) {
       vscode.window.showInformationMessage(
-        'Tropic is Active, please create a config file.'
+        'Tropic is Active.  Please create a config file, or deactivate Tropic.'
       );
     }
     // exit function
@@ -39,9 +39,12 @@ const onSave = (document: TextDocument) => {
   let protoFile: string;
   let requestsArr: object;
 
+  // by default, after requiring in a file/module, the require method maintains a cache of the file/module
+  // to account for any subsequent updates to config file, need to invalidate the cache by deleting it
+  // if cache is not invalidated, every call to require would result in the same initial output
+  delete require.cache[tropicConfigPath];
   // if config file exists, get config and request objects from config file
   const { config, requests } = require(`${tropicConfigPath}`);
-  console.log('from config file:', { config, requests });
   // assign variables to value of user inputs in config file
   entryPoint = path.resolve(rootDir, config.entry);
   portNumber = config.portNumber;
