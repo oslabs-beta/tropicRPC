@@ -8,6 +8,9 @@ const config = {
 
   // change "./demo.proto" to the relative path from the root directory to your proto file
   protoFile: 'src/proto/demo.proto',
+
+  // change "protoPackage" to your proto package's name
+  protoPackage: 'protoPackage',
 };
 
 // after activating Tropic extension, add request(s) here and save this file to execute
