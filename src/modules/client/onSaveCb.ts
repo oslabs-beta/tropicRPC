@@ -17,7 +17,7 @@ import * as vscode from 'vscode';
 const fs = require('fs');
 const path = require('path');
 const getRootProjectDir = require('./getRootProjectDir');
-const sendgRPCRequest = require('./gRPCRequest');
+const sendgRPCRequest = require('./sendgRPCRequest');
 
 const onSave = (
   document: TextDocument,
