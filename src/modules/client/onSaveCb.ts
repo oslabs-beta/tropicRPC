@@ -16,12 +16,11 @@ import * as vscode from 'vscode';
 // require in fs, path, and getRootProjectDir function/module
 const fs = require('fs');
 const path = require('path');
-const getRootProjectDir = require('./getRootProjectDir');
 const sendgRPCRequest = require('./sendgRPCRequest');
 
 const onSave = (
-  document: TextDocument,
-  tropicChannel: OutputChannel,
+  document: vscode.TextDocument,
+  tropicChannel: vscode.OutputChannel,
   tropicConfigPath: string,
   rootDir: string
 ) => {
@@ -62,15 +61,17 @@ const onSave = (
   protoPackage = config.protoPackage;
   requestsArr = Object.values(requests);
 
+  tropicChannel.append('Tropic Results:\n\n');
   // send each request to gRPC handler
-  requestsArr.map((request: object) =>
+  requestsArr.forEach((request: object) =>
     sendgRPCRequest(
       portNumber,
       protoFile,
       protoPackage,
       request.service,
       request.method,
-      request.message
+      request.message,
+      tropicChannel
     )
   );
 };
