@@ -17,6 +17,7 @@ import * as vscode from 'vscode';
 const fs = require('fs');
 const path = require('path');
 const getRootProjectDir = require('./getRootProjectDir');
+const sendgRPCRequest = require('./gRPCRequest');
 
 const onSave = (
   document: TextDocument,
@@ -44,7 +45,8 @@ const onSave = (
   let entryPoint: string;
   let portNumber: number;
   let protoFile: string;
-  let requestsArr: object;
+  let protoPackage: string;
+  let requestsArr: Array<object>;
 
   // by default, after requiring in a file/module, the require method maintains a cache of the file/module
   // to account for any subsequent updates to config file, need to invalidate the cache by deleting it
@@ -57,9 +59,20 @@ const onSave = (
   entryPoint = path.resolve(rootDir, config.entry);
   portNumber = config.portNumber;
   protoFile = path.resolve(rootDir, config.protoFile);
+  protoPackage = config.protoPackage;
   requestsArr = Object.values(requests);
 
-  // send necessary data to request functionality
+  // send each request to gRPC handler
+  requestsArr.map((request: object) =>
+    sendgRPCRequest(
+      portNumber,
+      protoFile,
+      protoPackage,
+      request.service,
+      request.method,
+      request.message
+    )
+  );
 };
 
 // export onSave function
