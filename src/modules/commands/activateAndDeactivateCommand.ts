@@ -7,8 +7,8 @@ const tropicChannel = vscode.window.createOutputChannel('Tropic');
 
 // require in necessary files/modules
 const fs = require('fs');
-const getRootProjectDir = require('./client/getRootProjectDir');
-const onSaveCb = require('./client/onSaveCb');
+const getRootProjectDir = require('../client/getRootProjectDir');
+const onSaveCb = require('../client/onSaveCb');
 
 const activateTropicCb = () => {
   // create variable to reference root path of user's project
