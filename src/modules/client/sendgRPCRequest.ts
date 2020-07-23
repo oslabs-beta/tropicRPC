@@ -37,7 +37,7 @@ const sendgRPCRequest = (
   const client = new userPackage[service](`localhost:${port}`, grpc.credentials.createInsecure());
 
   // invoke client object's method
-  client[`${method}`](message, (err, response) => {
+  const call = client[`${method}`](message, (err, response) => {
     if (err) console.log('error in grpc request: ', err);
 
     // generate formatted Request and Response message string
@@ -59,6 +59,18 @@ const sendgRPCRequest = (
 
     // exit function
     return null;
+  });
+
+  const streamed: Array<object> = [];
+  // method for server streaming; will return an object
+  call.on('data', (data) => {
+    console.log('received data from server: ', JSON.stringify(data));
+    streamed.push(data);
+  });
+  call.on('end', () => {
+    tropicChannel.append(`------------------------\n\nSUBMITTED REQUEST \n${'requestStr'}\n\nSERVER RESPONSE \n`);
+    tropicChannel.append(JSON.stringify(Object.assign({}, streamed), null, 2));
+    console.log('server done!');
   });
 };
 
