@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
 
-const createConfigFileCb = require('./modules/createConfigFileCommand');
+const createConfigFileCb = require('./modules/commands/createConfigFileCommand');
 const {
   activateTropicCb,
   deactivateTropicCb,
-} = require('./modules/activateAndDeactivateCommand');
+} = require('./modules/commands/activateAndDeactivateCommand');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed

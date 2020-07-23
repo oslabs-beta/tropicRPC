@@ -10,7 +10,7 @@ import * as vscode from 'vscode';
 
 const fs = require('fs');
 const path = require('path');
-const getRootProjectDir = require('./client/getRootProjectDir');
+const getRootProjectDir = require('../client/getRootProjectDir');
 
 const createConfigFile = () => {
   const tropicConfigPath = `${getRootProjectDir()}/.tropic.config.js`;
