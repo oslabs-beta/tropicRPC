@@ -17,6 +17,7 @@ import * as vscode from 'vscode';
 const fs = require('fs');
 const path = require('path');
 const sendgRPCRequest = require('./sendgRPCRequest');
+const configFileInputsCheck = require('./configFileInputsCheck');
 
 const onSave = (
   document: vscode.TextDocument,
@@ -62,6 +63,16 @@ const onSave = (
   protoFile = path.resolve(rootDir, config.protoFile);
   protoPackage = config.protoPackage;
   requestsArr = Object.values(requests);
+
+  configFileInputsCheck(
+    entryPoint,
+    ipAddress,
+    portNumber,
+    protoFile,
+    protoPackage,
+    requestsArr,
+    rootDir
+  );
 
   tropicChannel.append('Tropic Results:\n\n');
   // send each request to gRPC handler
