@@ -11,6 +11,10 @@
  * @param : {object} tropicChannel - reference to Tropic's output channel
  * @returns : null
  * @changelog : ##WHOEVER CHANGES THE FILE, date, details
+ * ## Steve Canavan, July 29, 2020, added functionality to include calls to server IP addresses
+ * ## Ed Chow, July 29, 2020, added client streaming functionality
+ * ## Roseanne, July 29, 2020, error handling for protopackage, service, and method inputs,
+ *    and modularized displaying output message
  * * */
 
 import * as vscode from 'vscode';
@@ -31,35 +35,34 @@ const sendgRPCRequest = (
   // read proto file and save as package definition (protocol buffer)
   // protoLoader compiles proto files into JS object
   const packageDef = protoLoader.loadSync(`${protoFilePath}`, {});
-  console.log('packageDef: ', packageDef, '\n\n');
+
   // read package definition and save packages in a grpc object
   const grpcObject = grpc.loadPackageDefinition(packageDef);
-  console.log('grpcObject: ', grpcObject, '\n\n');
-  // confirm that inputed protoPackage exist in proto file
+
+  // confirm that inputted protoPackage exist in proto file
   if (!grpcObject.hasOwnProperty(protoPackage)) {
     // if not, inform user of error
-    const responseStr = `ERROR:Proto package ${protoPackage} was not found in your proto file\n\n`;
-    displayOutputMessage(tropicChannel, service, method, message, responseStr);
+    const errorMessage: string = `ERROR: Proto package '${protoPackage}' was not found in your proto file\n\n`;
+    displayOutputMessage(tropicChannel, service, method, message, errorMessage);
     return null;
   }
 
-  // confirm that inputed service exist in proto package
+  // confirm that inputted service exist in proto package
   if (!packageDef.hasOwnProperty(`${protoPackage}.${service}`)) {
     // if not, inform user of error
-    const responseStr = `ERROR: Service ${service} was not found in ${protoPackage}\n\n`;
-    displayOutputMessage(tropicChannel, service, method, message, responseStr);
+    const errorMessage: string = `ERROR: Service '${service}' was not found in '${protoPackage}'\n\n`;
+    displayOutputMessage(tropicChannel, service, method, message, errorMessage);
     return null;
   }
 
-  //
+  // get the specific package object that we want to work with
   const userPackage = grpcObject[`${protoPackage}`];
-  console.log('userPackage: ', userPackage, '\n\n');
 
-  // confirm that inputed method exist in service
+  // confirm that inputted method exist in service
   if (!packageDef[`${protoPackage}.${service}`][method]) {
     // if not, inform user that method is not included in their specified service
-    const responseStr = `ERROR: Method '${method}' was not found in '${service}' service\n\n`;
-    displayOutputMessage(tropicChannel, service, method, message, responseStr);
+    const errorMessage: string = `ERROR: Method '${method}' was not found in '${service}' service\n\n`;
+    displayOutputMessage(tropicChannel, service, method, message, errorMessage);
     return null;
   }
 
@@ -74,7 +77,7 @@ const sendgRPCRequest = (
   // invoke client object's method
   const call = client[`${method}`](message, (err, response) => {
     if (err) {
-      let errorMessage: string = `ERROR: CODE ${err.code} - ${err.details}`;
+      const errorMessage: string = `ERROR: CODE ${err.code} - ${err.details}`;
       displayOutputMessage(tropicChannel, service, method, message, errorMessage);
       return null;
     }
@@ -88,6 +91,12 @@ const sendgRPCRequest = (
     // exit function
     return null;
   });
+
+  // const keys = Object.keys(message);
+  // for (let i = 0; i < keys.length; i += 1) {
+  //   call.write(message[keys[i]]);
+  // }
+  // call.end();
 
   // declare streamed varaible to store server streamed data
   const streamed: Array<object> = [];
