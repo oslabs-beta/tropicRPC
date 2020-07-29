@@ -17,6 +17,7 @@ const protoLoader = require('@grpc/proto-loader');
 
 const sendgRPCRequest = (
   port: number,
+  ipAddress: string,
   protoFilePath: string,
   protoPackage: string,
   service: string,
@@ -34,8 +35,10 @@ const sendgRPCRequest = (
   // create a connection to the gRPC server, for a specific service
   // return an object with all of the methods within that service, and save as client
   // grpc.credentials.createInsecure(): communication will be in plain text, i.e. non-encrypted
-  const client = new userPackage[service](`localhost:${port}`, grpc.credentials.createInsecure());
-
+  const client = new userPackage[service](
+    ipAddress ? ipAddress : `localhost:${port}`,
+    grpc.credentials.createInsecure()
+  );
   // invoke client object's method
   const call = client[`${method}`](message, (err, response) => {
     if (err) console.log('error in grpc request: ', err);
@@ -68,7 +71,9 @@ const sendgRPCRequest = (
     streamed.push(data);
   });
   call.on('end', () => {
-    tropicChannel.append(`------------------------\n\nSUBMITTED REQUEST \n${'requestStr'}\n\nSERVER RESPONSE \n`);
+    tropicChannel.append(
+      `------------------------\n\nSUBMITTED REQUEST \n${'requestStr'}\n\nSERVER RESPONSE \n`
+    );
     tropicChannel.append(JSON.stringify(Object.assign({}, streamed), null, 2));
     console.log('server done!');
   });

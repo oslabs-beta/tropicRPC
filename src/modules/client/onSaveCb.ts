@@ -43,6 +43,7 @@ const onSave = (
   // declare variables and corresponding data types to reference user inputs in config file
   let entryPoint: string;
   let portNumber: number;
+  let ipAddress: string;
   let protoFile: string;
   let protoPackage: string;
   let requestsArr: Array<object>;
@@ -56,6 +57,7 @@ const onSave = (
 
   // assign variables to value of user inputs in config file
   entryPoint = path.resolve(rootDir, config.entry);
+  ipAddress = config.ipAddress;
   portNumber = config.portNumber;
   protoFile = path.resolve(rootDir, config.protoFile);
   protoPackage = config.protoPackage;
@@ -66,6 +68,7 @@ const onSave = (
   requestsArr.forEach((request: object) =>
     sendgRPCRequest(
       portNumber,
+      ipAddress,
       protoFile,
       protoPackage,
       request.service,
