@@ -9,6 +9,8 @@
  * @param : {object} message - body of request to send
  * @returns : null
  * @changelog : ##WHOEVER CHANGES THE FILE, date, details
+ * ## Steve Canavan, July 29, 2020, added functionality to include calls to server IP addresses
+ * ## Ed Chow, July 29, 2020, added client streaming functionality
  * * */
 
 import * as vscode from 'vscode';
@@ -60,6 +62,12 @@ const sendgRPCRequest = (
     // exit function
     return null;
   });
+
+  const keys = Object.keys(message);
+  for (let i = 0; i < keys.length; i += 1) {
+    call.write(message[keys[i]]);
+  }
+  call.end();
 
   const streamed: Array<object> = [];
   // method for server streaming; will return an object
