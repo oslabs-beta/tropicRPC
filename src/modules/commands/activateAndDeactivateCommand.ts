@@ -41,7 +41,7 @@ const activateTropicCb = () => {
       serverProcess.stderr.on('data', (data) => {
         serverIsTurnedOn = false;
         vscode.window.showErrorMessage(
-          `There was an error starting your gRPC server. Please try manually starting it.`
+          `Error starting your gRPC server. Please try manually starting it.`
         );
       });
 
@@ -84,9 +84,9 @@ const deactivateTropicCb = () => {
   if (serverIsTurnedOn) {
     console.log('at end: ', serverProcess.pid);
     const killServerProcess = spawn('kill', [serverProcess.pid]);
-    setTimeout(() => killServerProcess.kill('SIGINT'), 0);
+    setTimeout(() => killServerProcess.kill('SIGINT'), 500);
     serverIsTurnedOn = false;
-    vscode.window.showInformationMessage(`gRPC server has been closed.`);
+    vscode.window.showInformationMessage(`gRPC server has been shut off.`);
   }
 
   vscode.window.showInformationMessage(`Tropic is deactivated`);
