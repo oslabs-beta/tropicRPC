@@ -1,13 +1,15 @@
 /**
  * @author : Joyce Lo, Shahrukh Khan; July 18, 2020
  * @author : Joyce Lo, Roseanne Damasco, Steve Canavan; July 20, 2020
+ * @author : Steve Canavan; July 30, 2020
  * @function : executes the config file, which exports grpc server and proto file data, to be processed
  * @param : {TextDocument} document - file that was saved
  * @param : {OutputChannel} tropicChannel - output channel for VS Code extension
  * @param : {string} tropicConfigPath - path to Tropic config file
  * @param : {string} rootDir - path to user's project root directory
  * @returns : null
- * @changelog : ##WHOEVER CHANGES THE FILE, date, details
+ * @changelog : ## Steve Canavan, July 30, 2020, passes config file inputs to validateConfigFileInputs function
+ * ## returns null and exits the on save function is validateConfigFileInputs returns false
  * * */
 
 // access the VS Code API
@@ -17,6 +19,7 @@ import * as vscode from 'vscode';
 const fs = require('fs');
 const path = require('path');
 const sendgRPCRequest = require('./sendgRPCRequest');
+const validateConfigFileInputs = require('./validateConfigFileInputs');
 
 const onSave = (
   document: vscode.TextDocument,
@@ -41,7 +44,6 @@ const onSave = (
   }
 
   // declare variables and corresponding data types to reference user inputs in config file
-  let entryPoint: string;
   let portNumber: number;
   let ipAddress: string;
   let protoFile: string;
@@ -56,12 +58,14 @@ const onSave = (
   const { config, requests } = require(`${tropicConfigPath}`);
 
   // assign variables to value of user inputs in config file
-  entryPoint = path.resolve(rootDir, config.entry);
   ipAddress = config.ipAddress;
   portNumber = config.portNumber;
   protoFile = path.resolve(rootDir, config.protoFile);
   protoPackage = config.protoPackage;
   requestsArr = Object.values(requests);
+
+  // check for valid proto files, ip addresses, and port numbers
+  if (!validateConfigFileInputs(ipAddress, portNumber, protoFile)) return null;
 
   tropicChannel.append('Tropic Results:\n\n');
   // send each request to gRPC handler
