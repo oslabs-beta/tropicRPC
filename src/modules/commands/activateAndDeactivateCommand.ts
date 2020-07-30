@@ -85,6 +85,7 @@ const deactivateTropicCb = () => {
     console.log('at end: ', serverProcess.pid);
     const killServerProcess = spawn('kill', [serverProcess.pid]);
     setTimeout(() => killServerProcess.kill('SIGINT'), 0);
+    serverIsTurnedOn = false;
     vscode.window.showInformationMessage(`gRPC server has been closed.`);
   }
 
