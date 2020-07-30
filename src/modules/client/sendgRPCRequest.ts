@@ -15,6 +15,7 @@
  * ## Ed Chow, July 29, 2020, added client streaming functionality
  * ## Roseanne, July 29, 2020, error handling for protopackage, service, and method inputs,
  *    and modularized displaying output message
+ * ## Ed Chow, Joyce Lo, Shahrukh Khan, July 30, 2020, added bi-directional streaming functionality
  * * */
 
 import * as vscode from 'vscode';
@@ -36,7 +37,7 @@ const sendgRPCRequest = (
   // protoLoader compiles proto files into JS object
   const packageDef = protoLoader.loadSync(`${protoFilePath}`, {});
 
-  // read package definition and save packages in a grpc object
+  // read package definition and save packages in a gRPC object
   const grpcObject = grpc.loadPackageDefinition(packageDef);
 
   // confirm that inputted protoPackage exist in proto file
@@ -47,7 +48,7 @@ const sendgRPCRequest = (
     return null;
   }
 
-  // confirm that inputted service exist in proto package
+  // confirm that inputted service exists in proto package
   if (!packageDef.hasOwnProperty(`${protoPackage}.${service}`)) {
     // if not, inform user of error
     const errorMessage: string = `ERROR: Service '${service}' was not found in '${protoPackage}'\n\n`;
@@ -58,7 +59,7 @@ const sendgRPCRequest = (
   // get the specific package object that we want to work with
   const userPackage = grpcObject[`${protoPackage}`];
 
-  // confirm that inputted method exist in service
+  // confirm that inputted method exists in service
   if (!packageDef[`${protoPackage}.${service}`][method]) {
     // if not, inform user that method is not included in their specified service
     const errorMessage: string = `ERROR: Method '${method}' was not found in '${service}' service\n\n`;
@@ -74,11 +75,17 @@ const sendgRPCRequest = (
     grpc.credentials.createInsecure()
   );
 
-  // invoke client object's method
+  // unary type
   const call = client[`${method}`](message, (err, response) => {
     if (err) {
       const errorMessage: string = `ERROR: CODE ${err.code} - ${err.details}`;
-      displayOutputMessage(tropicChannel, service, method, message, errorMessage);
+      displayOutputMessage(
+        tropicChannel,
+        service,
+        method,
+        message,
+        errorMessage
+      );
       return null;
     }
 
@@ -92,27 +99,56 @@ const sendgRPCRequest = (
     return null;
   });
 
-  // const keys = Object.keys(message);
-  // for (let i = 0; i < keys.length; i += 1) {
-  //   call.write(message[keys[i]]);
-  // }
-  // call.end();
+  const callMethodDefinition = call.call.methodDefinition;
+  const isRequestStream = callMethodDefinition.requestStream;
+  const isResponseStream = callMethodDefinition.responseStream;
 
-  // declare streamed varaible to store server streamed data
-  const streamed: Array<object> = [];
+  // bi-directional streaming
+  if (isRequestStream && isResponseStream) {
+    // write to call object the messages client wants to stream
+    const keys = Object.keys(message);
+    for (let i = 0; i < keys.length; i += 1) {
+      call.write(message[keys[i]]);
+    }
+    // event listener on call object listens for incoming data stream from server,
+    // displays incoming data as result in Tropic output channel
+    call.on('data', (data) => {
+      const responseStr = JSON.stringify(data, null, 2);
+      displayOutputMessage(
+        tropicChannel,
+        service,
+        method,
+        message,
+        responseStr
+      );
+    });
+    call.end();
+    // client streaming
+  } else if (isRequestStream) {
+    // write to call object the messages client wants to stream
+    const keys = Object.keys(message);
+    for (let i = 0; i < keys.length; i += 1) {
+      call.write(message[keys[i]]);
+    }
+    call.end();
+    // server streaming
+  } else {
+    call.on('data', (data) => {
+      // generate formatted response message string
+      const responseStr = JSON.stringify(data, null, 2);
 
-  // method for server streaming; will return an object
-  call.on('data', (data) => streamed.push(data));
-
-  call.on('end', () => {
-    // generate formatted response message string
-    const responseStr = JSON.stringify(Object.assign({}, streamed), null, 2);
-
-    // display response in tropic output channel
-    displayOutputMessage(tropicChannel, service, method, message, responseStr);
-
-    return null;
-  });
+      // display response in Tropic output channel
+      displayOutputMessage(
+        tropicChannel,
+        service,
+        method,
+        message,
+        responseStr
+      );
+      // exit function
+      return null;
+    });
+  }
 };
 
 module.exports = sendgRPCRequest;
