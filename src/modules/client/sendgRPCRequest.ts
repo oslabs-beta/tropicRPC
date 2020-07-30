@@ -70,7 +70,7 @@ const sendgRPCRequest = (
   // return an object with all of the methods within that service, and save as client
   // grpc.credentials.createInsecure(): communication will be in plain text, i.e. non-encrypted
   const client = new userPackage[service](
-    ipAddress ? ipAddress : `localhost:${port}`,
+    ipAddress ? ipAddress + ':' + port : `localhost:${port}`,
     grpc.credentials.createInsecure()
   );
 
@@ -78,7 +78,13 @@ const sendgRPCRequest = (
   const call = client[`${method}`](message, (err, response) => {
     if (err) {
       const errorMessage: string = `ERROR: CODE ${err.code} - ${err.details}`;
-      displayOutputMessage(tropicChannel, service, method, message, errorMessage);
+      displayOutputMessage(
+        tropicChannel,
+        service,
+        method,
+        message,
+        errorMessage
+      );
       return null;
     }
 
