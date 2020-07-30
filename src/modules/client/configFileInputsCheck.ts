@@ -3,14 +3,24 @@ const fs = require('fs');
 
 const configFileInputsCheck = (
   entryPoint: string,
-  portNumber: number,
   ipAddress: string,
+  portNumber: number,
   protoFile: string,
   protoPackage: string,
-  requestsArr: Array<object
+  requestsArr: Array<object>
 ) => {
-  if (fs.existsSync(entryPoint)) {
-    console.log('The path exists.');
+  console.log('proto', protoFile);
+  if (!fs.existsSync(entryPoint)) {
+    vscode.window.showErrorMessage(
+      `Entry point server file at '${entryPoint}' does not exist.`
+    );
+    return null;
   }
+  console.log('ip', ipAddress);
+  console.log(
+    /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?:[0:9])+$/.test(
+      ipAddress
+    )
+  );
 };
 module.exports = configFileInputsCheck;

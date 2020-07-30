@@ -63,16 +63,19 @@ const onSave = (
   protoFile = path.resolve(rootDir, config.protoFile);
   protoPackage = config.protoPackage;
   requestsArr = Object.values(requests);
-
-  configFileInputsCheck(
-    entryPoint,
-    ipAddress,
-    portNumber,
-    protoFile,
-    protoPackage,
-    requestsArr,
-    rootDir
-  );
+  console.log('ip in on save', ipAddress);
+  if (
+    !configFileInputsCheck(
+      entryPoint,
+      ipAddress,
+      portNumber,
+      protoFile,
+      protoPackage,
+      requestsArr,
+      rootDir
+    )
+  )
+    return;
 
   tropicChannel.append('Tropic Results:\n\n');
   // send each request to gRPC handler
