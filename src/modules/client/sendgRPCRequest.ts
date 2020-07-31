@@ -103,36 +103,20 @@ const sendgRPCRequest = (
   const isRequestStream = callMethodDefinition.requestStream;
   const isResponseStream = callMethodDefinition.responseStream;
 
-  // bi-directional streaming
-  if (isRequestStream && isResponseStream) {
-    // write to call object the messages client wants to stream
-    const keys = Object.keys(message);
-    for (let i = 0; i < keys.length; i += 1) {
-      call.write(message[keys[i]]);
-    }
-    // event listener on call object listens for incoming data stream from server,
-    // displays incoming data as result in Tropic output channel
-    call.on('data', (data) => {
-      const responseStr = JSON.stringify(data, null, 2);
-      displayOutputMessage(
-        tropicChannel,
-        service,
-        method,
-        message,
-        responseStr
-      );
-    });
-    call.end();
-    // client streaming
-  } else if (isRequestStream) {
+  // bidirectional streaming: handled by client + server streaming
+
+  // client streaming
+  if (isRequestStream) {
     // write to call object the messages client wants to stream
     const keys = Object.keys(message);
     for (let i = 0; i < keys.length; i += 1) {
       call.write(message[keys[i]]);
     }
     call.end();
-    // server streaming
-  } else {
+  }
+
+  // server streaming
+  if (isResponseStream) {
     call.on('data', (data) => {
       // generate formatted response message string
       const responseStr = JSON.stringify(data, null, 2);
