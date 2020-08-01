@@ -11,6 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const getRootProjectDir = require('../client/getRootProjectDir');
 const onSaveCb = require('../client/onSaveCb');
+const throttle = require('../client/throttleOnSave');
 
 const activateTropicCb = () => {
   // create variable to reference root path of user's project
@@ -50,11 +51,13 @@ const activateTropicCb = () => {
     'Tropic is active. \nAdd requests to config file and save to view responses.'
   );
 
+  const throttleOnSave = throttle(onSaveCb, 2000);
+
   // start listening for saves
   // saveListener invokes onSaveCb
   // logic for sending gRPC request goes inside onSaveCb
   saveListener = vscode.workspace.onDidSaveTextDocument((document) => {
-    onSaveCb(document, tropicChannel, tropicConfigPath, rootDir);
+    throttleOnSave(document, tropicChannel, tropicConfigPath, rootDir);
   });
   // exit function
   return null;
