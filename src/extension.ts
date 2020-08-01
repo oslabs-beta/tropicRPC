@@ -23,9 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
    **************************************************************/
   const activateTropic = vscode.commands.registerCommand(
     'tropic.activateTropic',
-    () => {
-      console.log('extension.ts'), activateTropicCb();
-    }
+    activateTropicCb
   );
 
   /**************************************************************
@@ -35,15 +33,10 @@ export function activate(context: vscode.ExtensionContext) {
     'tropic.deactivateTropic',
     deactivateTropicCb
   );
+
   context.subscriptions.push(
     createConfigFile,
     activateTropic,
     deactivateTropic
   );
-
-  let disposable = vscode.commands.registerCommand('tropic.helloWorld', () => {
-    // Display a message box to the user
-    vscode.window.showInformationMessage('Hello World from Tropic!');
-  });
-  context.subscriptions.push(disposable);
 }
