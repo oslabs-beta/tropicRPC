@@ -1,3 +1,11 @@
+/**
+ * @author : Steve Canavan, Roseanne Damasco, Joyce Lo, Ed Chow, Shahrukh Khan; July 20, 2020
+ * @function : checks user workspace for config file, starts server, initalizes Tropic output channel, initializes on save listener
+ * @param : none
+ * @returns : null
+ * @changelog : ##WHOEVER CHANGES THE FILE, date, details
+ * * */
+
 import * as vscode from 'vscode';
 import { ChildProcess, spawn } from 'child_process';
 
@@ -13,6 +21,7 @@ const fs = require('fs');
 const path = require('path');
 const getRootProjectDir = require('../client/getRootProjectDir');
 const onSaveCb = require('../client/onSaveCb');
+const throttle = require('../client/throttleOnSave');
 
 const activateTropicCb = () => {
   // create variable to reference root path of user's project
@@ -52,7 +61,9 @@ const activateTropicCb = () => {
         }
       }, 2500);
     } else {
-      vscode.window.showErrorMessage('Error in server path. Server was not started by Tropic.');
+      vscode.window.showErrorMessage(
+        'Error in server path. Server was not started by Tropic.'
+      );
     }
   }
 
@@ -64,16 +75,24 @@ const activateTropicCb = () => {
     'Tropic is active. \nAdd requests to config file and save to view responses.'
   );
 
+  const throttleOnSave = throttle(onSaveCb, 2000);
+
   // start listening for saves
   // saveListener invokes onSaveCb
   // logic for sending gRPC request goes inside onSaveCb
   saveListener = vscode.workspace.onDidSaveTextDocument((document) => {
-    onSaveCb(document, tropicChannel, tropicConfigPath, rootDir);
+    throttleOnSave(document, tropicChannel, tropicConfigPath, rootDir);
   });
   // exit function
   return null;
 };
-
+/**
+ * @author : Steve Canavan, Roseanne Damasco, Joyce Lo, Ed Chow, Shahrukh Khan; July 20, 2020
+ * @function : disposes of the save listener, turns off user server if Tropic turned it on, hides and clears Tropic output channel
+ * @param : none
+ * @returns : null
+ * @changelog : ##WHOEVER CHANGES THE FILE, date, details
+ * * */
 const deactivateTropicCb = () => {
   // dispose of saveListener
   if (saveListener) {
