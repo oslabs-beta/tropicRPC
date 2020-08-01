@@ -1,3 +1,11 @@
+/**
+ * @author : Steve Canavan, Roseanne Damasco, Joyce Lo, Ed Chow, Shahrukh Khan; July 20, 2020
+ * @function : checks user workspace for config file, starts server, initalizes Tropic output channel, initializes on save listener
+ * @param : none
+ * @returns : null
+ * @changelog : ##WHOEVER CHANGES THE FILE, date, details
+ * * */
+
 import * as vscode from 'vscode';
 import { ChildProcess, spawn } from 'child_process';
 
@@ -53,7 +61,9 @@ const activateTropicCb = () => {
         }
       }, 2500);
     } else {
-      vscode.window.showErrorMessage('Error in server path. Server was not started by Tropic.');
+      vscode.window.showErrorMessage(
+        'Error in server path. Server was not started by Tropic.'
+      );
     }
   }
 
@@ -76,7 +86,13 @@ const activateTropicCb = () => {
   // exit function
   return null;
 };
-
+/**
+ * @author : Steve Canavan, Roseanne Damasco, Joyce Lo, Ed Chow, Shahrukh Khan; July 20, 2020
+ * @function : disposes of the save listener, turns off user server if Tropic turned it on, hides and clears Tropic output channel
+ * @param : none
+ * @returns : null
+ * @changelog : ##WHOEVER CHANGES THE FILE, date, details
+ * * */
 const deactivateTropicCb = () => {
   // dispose of saveListener
   if (saveListener) {
