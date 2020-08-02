@@ -27,10 +27,6 @@ const onSave = (
   tropicConfigPath: string,
   rootDir: string
 ) => {
-  // show and clear Tropic output channel
-  tropicChannel.show(true);
-  tropicChannel.clear();
-
   //check if TextDocument is not the config file
   if (document.uri.fsPath !== tropicConfigPath) {
     // if config file does not exist in file system, display message instructing user to create config file
@@ -49,6 +45,10 @@ const onSave = (
   let protoFile: string;
   let protoPackage: string;
   let requestsArr: Array<object>;
+
+  // show and clear Tropic output channel
+  tropicChannel.show(true);
+  tropicChannel.clear();
 
   // by default, after requiring in a file/module, the require method maintains a cache of the file/module
   // to account for any subsequent updates to config file, need to invalidate the cache by deleting it
