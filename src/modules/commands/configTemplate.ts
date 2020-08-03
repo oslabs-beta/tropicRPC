@@ -1,7 +1,7 @@
 // add config details here
 const config = {
   // OPTIONAL: change './server/index.js' to the relative path from the root directory to the file that starts your server
-  // or '' if you do not need Tropic to start your server
+  // or '' if you do not need tropicRPC to start your server
   entry: './server/index.js',
 
   // OPTIONAL: change 3000 to the port number on which your server runs
@@ -17,7 +17,7 @@ const config = {
   protoPackage: 'protoPackage',
 };
 
-// after activating Tropic extension, add request(s) here and save this file to execute
+// after activating tropicRPC extension, add request(s) here and save this file to execute
 const requests = {
   // customize your request values below
   request1: {

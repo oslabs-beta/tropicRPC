@@ -19,12 +19,12 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   /**************************************************************
-   * Command: Activate Tropic functionality
+   * Command: Activate tropicRPC functionality
    **************************************************************/
   const activateTropic = vscode.commands.registerCommand('tropic.activateTropic', activateTropicCb);
 
   /**************************************************************
-   * Command: Deactivate save listener
+   * Command: Deactivate tropicRPC functionality
    **************************************************************/
   const deactivateTropic = vscode.commands.registerCommand(
     'tropic.deactivateTropic',
