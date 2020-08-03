@@ -1,8 +1,8 @@
-## What is Tropic? :pineapple:
+## What is tropicRPC? :pineapple:
 A VS Code extension that provides gRPC API endpoint testing.
 
 ## Core Features :zap:
-Tropic supports the following RPC streaming types:
+tropicRPC supports the following RPC streaming types:
 - unary
 - client streaming
 - server streaming

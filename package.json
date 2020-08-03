@@ -1,6 +1,6 @@
 {
-  "name": "tropic",
-  "displayName": "Tropic",
+  "name": "tropicRPC",
+  "displayName": "tropicRPC",
   "description": "A gRPC API endpoint testing tool.",
   "version": "0.0.1",
   "engines": {
@@ -19,15 +19,15 @@
     "commands": [
       {
         "command": "tropic.createConfigFile",
-        "title": "Tropic: Create Config File"
+        "title": "tropicRPC: Create Config File"
       },
       {
         "command": "tropic.activateTropic",
-        "title": "Tropic: Activate"
+        "title": "tropicRPC: Activate"
       },
       {
         "command": "tropic.deactivateTropic",
-        "title": "Tropic: Deactivate"
+        "title": "tropicRPC: Deactivate"
       }
     ]
   },

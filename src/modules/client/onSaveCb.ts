@@ -5,7 +5,7 @@
  * @function : executes the config file, which exports grpc server and proto file data, to be processed
  * @param : {TextDocument} document - file that was saved
  * @param : {OutputChannel} tropicChannel - output channel for VS Code extension
- * @param : {string} tropicConfigPath - path to Tropic config file
+ * @param : {string} tropicConfigPath - path to tropicRPC config file
  * @param : {string} rootDir - path to user's project root directory
  * @returns : null
  * @changelog : ## Steve Canavan, July 30, 2020, passes config file inputs to validateConfigFileInputs function
@@ -32,7 +32,7 @@ const onSave: Function = (
     // if config file does not exist in file system, display message instructing user to create config file
     if (!fs.existsSync(tropicConfigPath)) {
       vscode.window.showInformationMessage(
-        'Tropic is Active.  Please create a config file, or deactivate Tropic.'
+        'tropicRPC is Active.  Please create a config file, or deactivate tropicRPC.'
       );
     }
     // exit function
@@ -51,7 +51,7 @@ const onSave: Function = (
   }
   let requestsArr: Array<Request>;
 
-  // show and clear Tropic output channel
+  // show and clear tropicRPC output channel
   tropicChannel.show(true);
   tropicChannel.clear();
 
@@ -74,7 +74,7 @@ const onSave: Function = (
     return null;
   }
 
-  tropicChannel.append('Tropic Results:\n\n');
+  tropicChannel.append('tropicRPC Results:\n\n');
   // send each request to gRPC handler
   requestsArr.forEach((request: Request) =>
     sendgRPCRequest(
