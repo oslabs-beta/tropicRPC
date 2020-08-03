@@ -23,14 +23,14 @@ const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 const displayOutputMessage = require('./displayOutputMessage');
 
-const sendgRPCRequest = (
+const sendgRPCRequest: Function = (
   port: number,
   ipAddress: string,
   protoFilePath: string,
   protoPackage: string,
   service: string,
   method: string,
-  message: object,
+  message: {},
   tropicChannel: vscode.OutputChannel
 ) => {
   // read proto file and save as package definition (protocol buffer)
@@ -76,28 +76,26 @@ const sendgRPCRequest = (
   );
 
   // unary type
-  const call = client[`${method}`](message, (err, response) => {
-    if (err) {
-      const errorMessage: string = `ERROR: CODE ${err.code} - ${err.details}`;
-      displayOutputMessage(
-        tropicChannel,
-        service,
-        method,
-        message,
-        errorMessage
-      );
+  const call = client[`${method}`](
+    message,
+    (err: { code: number; details: string }, response: any) => {
+      if (err) {
+        console.log(typeof err);
+        const errorMessage: string = `ERROR: CODE ${err.code} - ${err.details}`;
+        displayOutputMessage(tropicChannel, service, method, message, errorMessage);
+        return null;
+      }
+
+      // generate formatted response message string
+      const responseStr: string = JSON.stringify(response, null, 2);
+
+      // display response in tropic output channel
+      displayOutputMessage(tropicChannel, service, method, message, responseStr);
+
+      // exit function
       return null;
     }
-
-    // generate formatted response message string
-    const responseStr = JSON.stringify(response, null, 2);
-
-    // display response in tropic output channel
-    displayOutputMessage(tropicChannel, service, method, message, responseStr);
-
-    // exit function
-    return null;
-  });
+  );
 
   const callMethodDefinition = call.call.methodDefinition;
   const isRequestStream = callMethodDefinition.requestStream;
@@ -108,7 +106,7 @@ const sendgRPCRequest = (
   // client streaming
   if (isRequestStream) {
     // write to call object the messages client wants to stream
-    const keys = Object.keys(message);
+    const keys: Array<string> = Object.keys(message);
     for (let i = 0; i < keys.length; i += 1) {
       call.write(message[keys[i]]);
     }
@@ -117,18 +115,12 @@ const sendgRPCRequest = (
 
   // server streaming
   if (isResponseStream) {
-    call.on('data', (data) => {
+    call.on('data', (data: any) => {
       // generate formatted response message string
-      const responseStr = JSON.stringify(data, null, 2);
+      const responseStr: string = JSON.stringify(data, null, 2);
 
       // display response in Tropic output channel
-      displayOutputMessage(
-        tropicChannel,
-        service,
-        method,
-        message,
-        responseStr
-      );
+      displayOutputMessage(tropicChannel, service, method, message, responseStr);
       // exit function
       return null;
     });

@@ -12,7 +12,7 @@
 
 import * as vscode from 'vscode';
 
-const displayOuptMessage = (
+const displayOuptMessage: Function = (
   tropicChannel: vscode.OutputChannel,
   service: string,
   method: string,
@@ -20,7 +20,7 @@ const displayOuptMessage = (
   responseStr: string
 ) => {
   // generate formatted request message string
-  const requestStr = JSON.stringify(
+  const requestStr: string = JSON.stringify(
     {
       service,
       method,
@@ -31,7 +31,7 @@ const displayOuptMessage = (
   );
 
   // focus output to tropic channel, and display request input
-  const outputTemplate = `------------------------\n\nSUBMITTED REQUEST \n${requestStr}\n\nSERVER RESPONSE \n${responseStr}\n\n`;
+  const outputTemplate: string = `------------------------\n\nSUBMITTED REQUEST \n${requestStr}\n\nSERVER RESPONSE \n${responseStr}\n\n`;
   tropicChannel.show(true);
   tropicChannel.append(outputTemplate);
   return null;

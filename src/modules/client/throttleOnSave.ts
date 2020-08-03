@@ -7,10 +7,10 @@
  * @changelog : ##WHOEVER CHANGES THE FILE, date, details
  * * */
 
-const throttle = (fn: Function, delay: number) => {
-  let last = 0;
+const throttle: Function = (fn: Function, delay: number): Function => {
+  let last: number = 0;
   return function throttledFn(...args: any[]) {
-    const now = new Date().getTime();
+    const now: number = new Date().getTime();
     if (now - last < delay) {
       return;
     }

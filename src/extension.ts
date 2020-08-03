@@ -21,10 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
   /**************************************************************
    * Command: Activate Tropic functionality
    **************************************************************/
-  const activateTropic = vscode.commands.registerCommand(
-    'tropic.activateTropic',
-    activateTropicCb
-  );
+  const activateTropic = vscode.commands.registerCommand('tropic.activateTropic', activateTropicCb);
 
   /**************************************************************
    * Command: Deactivate save listener
@@ -34,9 +31,5 @@ export function activate(context: vscode.ExtensionContext) {
     deactivateTropicCb
   );
 
-  context.subscriptions.push(
-    createConfigFile,
-    activateTropic,
-    deactivateTropic
-  );
+  context.subscriptions.push(createConfigFile, activateTropic, deactivateTropic);
 }
