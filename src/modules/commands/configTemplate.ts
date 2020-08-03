@@ -1,18 +1,19 @@
 // add config details here
 const config = {
-  // change "./server/index.js" to the relative path from the root directory to the file that starts your server
+  // OPTIONAL: change './server/index.js' to the relative path from the root directory to the file that starts your server
+  // or '' if you do not need Tropic to start your server
   entry: './server/index.js',
 
-  // change 3000 to the port number on which your server runs
+  // OPTIONAL: change 3000 to the port number on which your server runs
   portNumber: 3000,
 
-  // populate '' with the IP address of your server (exclude portNumber)
+  // OPTIONAL: populate '' with the IP address of your server (exclude portNumber)
   ipAddress: '',
 
-  // change "./demo.proto" to the relative path from the root directory to your proto file
+  // change './demo.proto' to the relative path from the root directory to your proto file
   protoFile: 'src/proto/demo.proto',
 
-  // change "protoPackage" to your proto package's name
+  // change 'protoPackage' to your proto package's name
   protoPackage: 'protoPackage',
 };
 

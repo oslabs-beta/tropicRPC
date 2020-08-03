@@ -21,7 +21,7 @@ const path = require('path');
 const sendgRPCRequest = require('./sendgRPCRequest');
 const validateConfigFileInputs = require('./validateConfigFileInputs');
 
-const onSave = (
+const onSave: Function = (
   document: vscode.TextDocument,
   tropicChannel: vscode.OutputChannel,
   tropicConfigPath: string,
@@ -44,7 +44,12 @@ const onSave = (
   let ipAddress: string;
   let protoFile: string;
   let protoPackage: string;
-  let requestsArr: Array<object>;
+  interface Request {
+    service: string;
+    method: string;
+    message: {};
+  }
+  let requestsArr: Array<Request>;
 
   // show and clear Tropic output channel
   tropicChannel.show(true);
@@ -65,11 +70,13 @@ const onSave = (
   requestsArr = Object.values(requests);
 
   // check for valid proto files, ip addresses, and port numbers
-  if (!validateConfigFileInputs(ipAddress, portNumber, protoFile)) return null;
+  if (!validateConfigFileInputs(ipAddress, portNumber, protoFile)) {
+    return null;
+  }
 
   tropicChannel.append('Tropic Results:\n\n');
   // send each request to gRPC handler
-  requestsArr.forEach((request: object) =>
+  requestsArr.forEach((request: Request) =>
     sendgRPCRequest(
       portNumber,
       ipAddress,
@@ -81,6 +88,8 @@ const onSave = (
       tropicChannel
     )
   );
+
+  return null;
 };
 
 // export onSave function

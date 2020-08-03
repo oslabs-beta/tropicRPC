@@ -12,8 +12,8 @@ const fs = require('fs');
 const path = require('path');
 const getRootProjectDir = require('../client/getRootProjectDir');
 
-const createConfigFile = () => {
-  const tropicConfigPath = `${getRootProjectDir()}/.tropic.config.js`;
+const createConfigFile: Function = () => {
+  const tropicConfigPath: string = `${getRootProjectDir()}/.tropic.config.js`;
 
   // if the tropic.config.js file already exists in the root directory
   // then display message indicating the file already exists
@@ -29,7 +29,7 @@ const createConfigFile = () => {
   // reading data from the config template
   // configTemplate file: make sure development file is in .ts format
   // it will be a .js file on client side, as indicated below
-  const templateFile = fs.readFileSync(
+  const templateFile: string = fs.readFileSync(
     path.resolve(__dirname, './configTemplate.js'),
     'utf8'
   );
@@ -38,7 +38,7 @@ const createConfigFile = () => {
   fs.writeFileSync(tropicConfigPath, templateFile, 'utf8');
 
   // open new file in VS Code
-  vscode.workspace.openTextDocument(tropicConfigPath).then((doc) => {
+  vscode.workspace.openTextDocument(tropicConfigPath).then((doc: vscode.TextDocument) => {
     // after opening new file, need to make it the focus
     vscode.window.showTextDocument(doc);
   });
