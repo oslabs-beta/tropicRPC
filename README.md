@@ -1,33 +1,31 @@
 ## What is tropicRPC? :pineapple:
+
 A Visual Studio Code extension that provides gRPC Remote Procedure Call (gRPC) API endpoint testing.
 
 ## Core Features :zap:
-tropicRPC supports the following RPC streaming types:
-- unary
-- client streaming
-- server streaming
-- bi-directional streaming
 
-
-* Starts your gRPC server
-* Generates a configuration file within the open VS Code project to be populated with the user's server and request information
-* On save, tropicRPC will make a remote procedure call (RPC) from an auto-generated client
-* tropicRPC supports the following RPC types:
+- Starts your gRPC server
+- Generates a configuration file within the open VS Code project to be populated with the user's server and request information
+- On save, tropicRPC will make a remote procedure call (RPC) from an auto-generated client
+- tropicRPC supports the following RPC types:
   - unary
   - client-streaming
   - server-streaming
   - bidirectional streaming
-* The server response is displayed in the VS Code tropicRPC output channel
+- The server response is displayed in the VS Code tropicRPC output channel
 
 ## Getting Started
 
 ### **Installation**
+
 tropicRPC can be installed from the VS Code Extensions Marketplace [here]().
 
 ### **Setting up the config file**
+
 Open the command palette in VS Code (Cmd/Ctrl + Shift + P) and select `tropicRPC: Create Config File`. A default config file will be generated. Follow the instructions in the config object to update the entry, portNumber, ipAddress, protoFile, and protoPackage.
 
 ### **tropicRPC's mock API**
+
 A mock gRPC API was built for testing tropicRPC during development. This mock API is open-sourced for users to test the tropicRPC extension. It's available in this [GitHub repository](https://github.com/tropicRPC/Mock-gRPC-API).
 
 ## Write Your First tropicRPC gRPC Request
@@ -37,8 +35,8 @@ A mock gRPC API was built for testing tropicRPC during development. This mock AP
 2. In the 'request' object, set the values of the 'service', 'method', and 'message' properties appropriately.
 
 3. On every config file save, tropicRPC will send the request(s) and display your server results in the output channel.
-    * For unary and server-streaming RPCs, add fields as properties on request object
-    * For client-streaming and bidirectional RPCs, add each stream as an object nested under the request object
+   - For unary and server-streaming RPCs, add fields as properties on request object
+   - For client-streaming and bidirectional RPCs, add each stream as an object nested under the request object
 
 ```javascript
 // add config details here
@@ -77,7 +75,7 @@ const requests = {
     message: {
       0: {
         field1: 0,
-        field2: 'Hello World', 
+        field2: 'Hello World',
       },
       1: {
         field1: 1,
@@ -94,6 +92,7 @@ const requests = {
 When you are ready to end your session, search for tropicRPC using the VS Code Command Palette (Cmd/Ctrl + Shift + P) and run the `tropicRPC: Deactivate` command. Deactivating the extension will stop your server.
 
 ## Future Features :tropical_drink:
+
 - [ ] Support for additional metadata in request
 - [ ] Predictive text for services and methods
 - [ ] Schema / service method preview via hovering
@@ -101,6 +100,7 @@ When you are ready to end your session, search for tropicRPC using the VS Code C
 - [ ] Historical log of all requests and responses
 
 ## Built By :yellow_heart:
+
 - [Ed Chow](https://github.com/edkchow)
 - [Joyce Lo](https://github.com/joycelo)
 - [Roseanne Damasco](https://github.com/rosedamasco)
