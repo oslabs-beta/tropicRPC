@@ -1,7 +1,7 @@
 /**
  * @author : Roseanne Damasco; July 29, 2020
- * @function : displays request and corresponding server result in Tropic output channel
- * @param : {object} tropicChannel - reference to Tropic's output channel
+ * @function : displays request and corresponding server result in tropicRPC output channel
+ * @param : {object} tropicChannel - reference to tropicRPC's output channel
  * @param : {string} service - service of gRPC request
  * @param : {string} method - method of gRPC request
  * @param : {object} message - body of gRPC request
@@ -30,7 +30,7 @@ const displayOuptMessage: Function = (
     2
   );
 
-  // focus output to tropic channel, and display request input
+  // focus output to tropicRPC channel, and display request input
   const outputTemplate: string = `------------------------\n\nSUBMITTED REQUEST \n${requestStr}\n\nSERVER RESPONSE \n${responseStr}\n\n`;
   tropicChannel.show(true);
   tropicChannel.append(outputTemplate);

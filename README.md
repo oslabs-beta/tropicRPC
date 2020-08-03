@@ -2,6 +2,12 @@
 A Visual Studio Code extension that provides gRPC Remote Procedure Call (gRPC) API endpoint testing.
 
 ## Core Features :zap:
+tropicRPC supports the following RPC streaming types:
+- unary
+- client streaming
+- server streaming
+- bi-directional streaming
+
 
 * Starts your gRPC server
 * Generates a configuration file within the open VS Code project to be populated with the user's server and request information
