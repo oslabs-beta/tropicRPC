@@ -14,7 +14,7 @@ import { ChildProcess, spawn } from 'child_process';
 let saveListener: vscode.Disposable;
 let serverProcess: ChildProcess;
 let serverIsTurnedOn: boolean;
-const tropicChannel = vscode.window.createOutputChannel('Tropic');
+const tropicChannel: vscode.OutputChannel = vscode.window.createOutputChannel('Tropic');
 
 // require in necessary files/modules
 const fs = require('fs');
@@ -23,11 +23,11 @@ const getRootProjectDir = require('../client/getRootProjectDir');
 const onSaveCb = require('../client/onSaveCb');
 const throttle = require('../client/throttleOnSave');
 
-const activateTropicCb = () => {
+const activateTropicCb: Function = () => {
   // create variable to reference root path of user's project
-  const rootDir = getRootProjectDir();
+  const rootDir: string = getRootProjectDir();
   // create variable to reference config file path
-  const tropicConfigPath = `${rootDir}/.tropic.config.js`;
+  const tropicConfigPath: string = `${rootDir}/.tropic.config.js`;
 
   // if config file does not exist in file system, display message instructing user to create config file
   if (!fs.existsSync(tropicConfigPath)) {
@@ -39,7 +39,7 @@ const activateTropicCb = () => {
   // start up user's server, if server path was provided
   delete require.cache[tropicConfigPath];
   const { config } = require(tropicConfigPath);
-  const serverPath = path.resolve(rootDir, config.entry);
+  const serverPath: string = path.resolve(rootDir, config.entry);
   if (config.entry) {
     // confirm that the serverPath leads to a valid file
     if (fs.existsSync(serverPath)) {
@@ -47,12 +47,14 @@ const activateTropicCb = () => {
       serverProcess = spawn('node', [serverPath], { cwd: rootDir });
       serverIsTurnedOn = true;
       // if an error is reported, inform user
-      serverProcess.stderr.on('data', (data) => {
-        serverIsTurnedOn = false;
-        vscode.window.showErrorMessage(
-          `Error starting your gRPC server. Please try manually starting it.`
-        );
-      });
+      if (serverProcess.stderr) {
+        serverProcess.stderr.on('data', (data) => {
+          serverIsTurnedOn = false;
+          vscode.window.showErrorMessage(
+            `Error starting your gRPC server. Please try manually starting it.`
+          );
+        });
+      }
 
       // inform user that server is starting
       setTimeout(() => {
@@ -61,9 +63,7 @@ const activateTropicCb = () => {
         }
       }, 2500);
     } else {
-      vscode.window.showErrorMessage(
-        'Error in server path. Server was not started by Tropic.'
-      );
+      vscode.window.showErrorMessage('Error in server path. Server was not started by Tropic.');
     }
   }
 
@@ -75,17 +75,18 @@ const activateTropicCb = () => {
     'Tropic is active. \nAdd requests to config file and save to view responses.'
   );
 
-  const throttleOnSave = throttle(onSaveCb, 2000);
+  const throttleOnSave: Function = throttle(onSaveCb, 2000);
 
   // start listening for saves
   // saveListener invokes onSaveCb
   // logic for sending gRPC request goes inside onSaveCb
-  saveListener = vscode.workspace.onDidSaveTextDocument((document) => {
+  saveListener = vscode.workspace.onDidSaveTextDocument((document: vscode.TextDocument) => {
     throttleOnSave(document, tropicChannel, tropicConfigPath, rootDir);
   });
   // exit function
   return null;
 };
+
 /**
  * @author : Steve Canavan, Roseanne Damasco, Joyce Lo, Ed Chow, Shahrukh Khan; July 20, 2020
  * @function : disposes of the save listener, turns off user server if Tropic turned it on, hides and clears Tropic output channel
@@ -93,7 +94,8 @@ const activateTropicCb = () => {
  * @returns : null
  * @changelog : ##WHOEVER CHANGES THE FILE, date, details
  * * */
-const deactivateTropicCb = () => {
+
+const deactivateTropicCb: Function = () => {
   // dispose of saveListener
   if (saveListener) {
     saveListener.dispose();
@@ -101,11 +103,12 @@ const deactivateTropicCb = () => {
 
   // close opened server
   if (serverIsTurnedOn) {
-    console.log('at end: ', serverProcess.pid);
-    const killServerProcess = spawn('kill', [serverProcess.pid]);
-    setTimeout(() => killServerProcess.kill('SIGINT'), 500);
-    serverIsTurnedOn = false;
-    vscode.window.showInformationMessage(`gRPC server has been shut off.`);
+    const killServerProcess: ChildProcess = spawn('kill', [`${serverProcess.pid}`]);
+    setTimeout(() => {
+      killServerProcess.kill('SIGINT');
+      serverIsTurnedOn = false;
+      vscode.window.showInformationMessage(`gRPC server has been shut off.`);
+    }, 1000);
   }
 
   vscode.window.showInformationMessage(`Tropic is deactivated`);
