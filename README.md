@@ -28,6 +28,10 @@ tropicRPC can be installed from the VS Code Extensions Marketplace [here]().
 
 Open the command palette in VS Code (Cmd/Ctrl + Shift + P) and select `tropicRPC: Create Config File`. A default config file will be generated. Follow the instructions in the config object to update the entry, portNumber, ipAddress, protoFile, and protoPackage.
 
+<center>
+<img width="800px" src="./DOCUMENTATION/images/update_config.gif" alt="config demo gif" />
+</center>
+
 ### **tropicRPC's mock API**
 
 A mock gRPC API was built for testing tropicRPC during development. This mock API is open-sourced for users to test the tropicRPC extension. It's available in this [GitHub repository](https://github.com/tropicRPC/Mock-gRPC-API).
@@ -90,6 +94,10 @@ const requests = {
   // add additional request objects below, as necessary, using the above format
 };
 ```
+
+<center>
+<img width="800px" src="./DOCUMENTATION/images/add_request.gif" alt="request demo gif" />
+</center>
 
 ## Ending Your tropicRPC Session
 
