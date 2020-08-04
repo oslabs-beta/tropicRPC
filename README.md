@@ -1,3 +1,7 @@
+<center>
+<img src="./DOCUMENTATION/images/tropicRPC.png" >
+</center>
+
 ## What is tropicRPC? :pineapple:
 
 A Visual Studio Code extension that provides gRPC Remote Procedure Call (gRPC) API endpoint testing.
@@ -91,7 +95,7 @@ const requests = {
 
 When you are ready to end your session, search for tropicRPC using the VS Code Command Palette (Cmd/Ctrl + Shift + P) and run the `tropicRPC: Deactivate` command. Deactivating the extension will stop your server.
 
-## Troubleshooting: Changing your server path
+## Troubleshooting: Changing Your Server Path
 
 After initially setting your server path, any additional updates to the path will require the extension to be deactivated and then reactivated for changes to take effect.
 
