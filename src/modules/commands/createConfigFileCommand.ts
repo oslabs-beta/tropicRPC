@@ -13,13 +13,13 @@ const path = require('path');
 const getRootProjectDir = require('../client/getRootProjectDir');
 
 const createConfigFile: Function = () => {
-  const tropicConfigPath: string = `${getRootProjectDir()}/.tropic.config.js`;
+  const tropicConfigPath: string = `${getRootProjectDir()}/.tropicRPC.config.js`;
 
-  // if the tropic.config.js file already exists in the root directory
+  // if the tropicRPC.config.js file already exists in the root directory
   // then display message indicating the file already exists
   if (fs.existsSync(tropicConfigPath)) {
     vscode.window.showInformationMessage(
-      `A Tropic configuration file already exists at ${tropicConfigPath}`
+      `A tropicRPC configuration file already exists at ${tropicConfigPath}`
     );
 
     // exit out

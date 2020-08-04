@@ -8,7 +8,7 @@
  * @param : {string} service - service of gRPC to call
  * @param : {string} method - method of gRPC endpoint to invoke
  * @param : {object} message - body of request to send
- * @param : {object} tropicChannel - reference to Tropic's output channel
+ * @param : {object} tropicChannel - reference to tropicRPC's output channel
  * @returns : null
  * @changelog : ##WHOEVER CHANGES THE FILE, date, details
  * ## Steve Canavan, July 29, 2020, added functionality to include calls to server IP addresses
@@ -89,7 +89,7 @@ const sendgRPCRequest: Function = (
       // generate formatted response message string
       const responseStr: string = JSON.stringify(response, null, 2);
 
-      // display response in tropic output channel
+      // display response in tropicRPC output channel
       displayOutputMessage(tropicChannel, service, method, message, responseStr);
 
       // exit function
@@ -119,7 +119,7 @@ const sendgRPCRequest: Function = (
       // generate formatted response message string
       const responseStr: string = JSON.stringify(data, null, 2);
 
-      // display response in Tropic output channel
+      // display response in tropicRPC output channel
       displayOutputMessage(tropicChannel, service, method, message, responseStr);
       // exit function
       return null;

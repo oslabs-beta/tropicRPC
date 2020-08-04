@@ -1,6 +1,6 @@
 /**
  * @author : Steve Canavan, Roseanne Damasco, Joyce Lo, Ed Chow, Shahrukh Khan; July 20, 2020
- * @function : checks user workspace for config file, starts server, initalizes Tropic output channel, initializes on save listener
+ * @function : checks user workspace for config file, starts server, initalizes tropicRPC output channel, initializes on save listener
  * @param : none
  * @returns : null
  * @changelog : ##WHOEVER CHANGES THE FILE, date, details
@@ -14,7 +14,7 @@ import { ChildProcess, spawn } from 'child_process';
 let saveListener: vscode.Disposable;
 let serverProcess: ChildProcess;
 let serverIsTurnedOn: boolean;
-const tropicChannel: vscode.OutputChannel = vscode.window.createOutputChannel('Tropic');
+const tropicChannel: vscode.OutputChannel = vscode.window.createOutputChannel('tropicRPC');
 
 // require in necessary files/modules
 const fs = require('fs');
@@ -27,7 +27,7 @@ const activateTropicCb: Function = () => {
   // create variable to reference root path of user's project
   const rootDir: string = getRootProjectDir();
   // create variable to reference config file path
-  const tropicConfigPath: string = `${rootDir}/.tropic.config.js`;
+  const tropicConfigPath: string = `${rootDir}/.tropicRPC.config.js`;
 
   // if config file does not exist in file system, display message instructing user to create config file
   if (!fs.existsSync(tropicConfigPath)) {
@@ -63,7 +63,7 @@ const activateTropicCb: Function = () => {
         }
       }, 2500);
     } else {
-      vscode.window.showErrorMessage('Error in server path. Server was not started by Tropic.');
+      vscode.window.showErrorMessage('Error in server path. Server was not started by tropicRPC.');
     }
   }
 
@@ -72,7 +72,7 @@ const activateTropicCb: Function = () => {
   tropicChannel.show(true);
   tropicChannel.clear();
   tropicChannel.append(
-    'Tropic is active. \nAdd requests to config file and save to view responses.'
+    'tropicRPC is active. \nAdd requests to config file and save to view responses.'
   );
 
   const throttleOnSave: Function = throttle(onSaveCb, 2000);
@@ -89,7 +89,7 @@ const activateTropicCb: Function = () => {
 
 /**
  * @author : Steve Canavan, Roseanne Damasco, Joyce Lo, Ed Chow, Shahrukh Khan; July 20, 2020
- * @function : disposes of the save listener, turns off user server if Tropic turned it on, hides and clears Tropic output channel
+ * @function : disposes of the save listener, turns off user server if tropicRPC turned it on, hides and clears tropicRPC output channel
  * @param : none
  * @returns : null
  * @changelog : ##WHOEVER CHANGES THE FILE, date, details
@@ -111,9 +111,9 @@ const deactivateTropicCb: Function = () => {
     }, 1000);
   }
 
-  vscode.window.showInformationMessage(`Tropic is deactivated`);
+  vscode.window.showInformationMessage(`tropicRPC is deactivated`);
 
-  // hide and clear Tropic output channel
+  // hide and clear tropicRPC output channel
   tropicChannel.hide();
   tropicChannel.clear();
 
