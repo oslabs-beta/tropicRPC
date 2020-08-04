@@ -87,6 +87,10 @@ const requests = {
 
 When you are ready to end your session, search for tropicRPC using the VS Code Command Palette (Cmd/Ctrl + Shift + P) and run the `tropicRPC: Deactivate` command. Deactivating the extension will stop your server.
 
+## Troubleshooting: Changing your server path
+
+After initially setting your server path, any additional updates to the path will require the extension to be deactivated and then reactivated for changes to take effect.
+
 ## Future Features :tropical_drink:
 - [ ] Support for additional metadata in request
 - [ ] Predictive text for services and methods
