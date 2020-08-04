@@ -22,7 +22,7 @@ A Visual Studio Code extension that provides gRPC Remote Procedure Call (gRPC) A
 
 ### **Installation**
 
-tropicRPC can be installed from the VS Code Extensions Marketplace [here]().
+tropicRPC can be installed from the VS Code Extensions Marketplace [here](https://marketplace.visualstudio.com/items?itemName=tropicRPC.tropicrpc).
 
 ### **Setting up the config file**
 
