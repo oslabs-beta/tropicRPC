@@ -9,7 +9,6 @@
  * * */
 
 import * as vscode from 'vscode';
-import { Func } from 'mocha';
 const fs = require('fs');
 
 const validateConfigFileInputs: Function = (
