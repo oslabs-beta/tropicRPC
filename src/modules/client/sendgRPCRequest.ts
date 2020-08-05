@@ -30,7 +30,7 @@ const sendgRPCRequest: Function = (
   protoPackage: string,
   service: string,
   method: string,
-  message: {},
+  message: any,
   tropicChannel: vscode.OutputChannel
 ) => {
   // read proto file and save as package definition (protocol buffer)
