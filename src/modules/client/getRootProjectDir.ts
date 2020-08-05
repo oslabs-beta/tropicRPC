@@ -11,7 +11,7 @@ import * as vscode from 'vscode';
 const fs = require('fs');
 
 const getRootProjectDir: Function = (): string => {
-  const workspaceFolders: vscode.WorkspaceFolder[] | undefined = vscode.workspace.workspaceFolders;
+  const workspaceFolders: readonly vscode.WorkspaceFolder[] | undefined = vscode.workspace.workspaceFolders;
   const currOpenFile: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
   // Confirm that a project is open
   if (workspaceFolders === undefined) {
