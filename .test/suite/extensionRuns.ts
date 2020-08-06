@@ -1,5 +1,5 @@
 /**
- * @author : Shahrukh Khan, Roseanne Demasco, Steve Canavan
+ * @author : Shahrukh Khan, Roseanne Damasco, Steve Canavan
  * @functionality : Implementing chai tests for throttle functionality 
  * @changelog : ##WHOEVER CHANGES THE FILE, date, details
  * * */
