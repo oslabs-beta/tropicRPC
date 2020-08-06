@@ -1,6 +1,7 @@
-<center>
+<p align="center">
 <img src="./DOCUMENTATION/images/tropicRPC.png" >
-</center>
+</p>
+
 
 ## What is tropicRPC? :pineapple:
 
